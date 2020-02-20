@@ -2,6 +2,8 @@ package com.prudhvir3ddy.trendinggithubrepos
 
 import android.app.Application
 import com.prudhvir3ddy.trendinggithubrepos.di.networkModule
+import com.prudhvir3ddy.trendinggithubrepos.di.repoModule
+import com.prudhvir3ddy.trendinggithubrepos.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -20,9 +22,11 @@ class MyApplication : Application() {
       androidContext(this@MyApplication)
       // declare modules
       modules(
-          listOf(
-              networkModule
-          )
+        listOf(
+          networkModule,
+          viewModelModule,
+          repoModule
+        )
       )
     }
   }

@@ -1,10 +1,27 @@
 package com.prudhvir3ddy.trendinggithubrepos.di
 
 import com.prudhvir3ddy.trendinggithubrepos.network.ApiService
+import com.prudhvir3ddy.trendinggithubrepos.ui.MainRepo
+import com.prudhvir3ddy.trendinggithubrepos.ui.MainViewModel
 import com.prudhvir3ddy.trendinggithubrepos.utils.AppConstants.BASE_URL
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+
+val viewModelModule = module {
+
+  viewModel {
+    MainViewModel(get())
+  }
+
+}
+
+val repoModule = module {
+  single {
+    MainRepo(get())
+  }
+}
 
 val networkModule = module {
   single {

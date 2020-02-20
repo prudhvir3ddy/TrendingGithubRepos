@@ -8,6 +8,7 @@ import com.prudhvir3ddy.trendinggithubrepos.network.ApiService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import javax.net.ssl.SSLHandshakeException
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(layout.activity_main)
+
+    val mainViewModel: MainViewModel by viewModel()
 
     GlobalScope.launch {
       try {
