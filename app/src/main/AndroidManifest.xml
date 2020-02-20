@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.prudhvir3ddy.trendinggithubrepos">
 
+  <uses-permission android:name="android.permission.INTERNET" />
   <application
       android:name=".MyApplication"
       android:allowBackup="false"

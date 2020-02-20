@@ -11,5 +11,6 @@ data class NetworkResponse(
   val stars: Int,
   val forks: Int,
   val currentPeriodStars: Int
-    //TODO  builtBY
+  //TODO  builtBY
 )
+
