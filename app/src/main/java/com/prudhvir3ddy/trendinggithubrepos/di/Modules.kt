@@ -1,5 +1,8 @@
 package com.prudhvir3ddy.trendinggithubrepos.di
 
+import android.content.Context
+import com.prudhvir3ddy.trendinggithubrepos.database.RepoDao
+import com.prudhvir3ddy.trendinggithubrepos.database.TrendingRepoDatabase
 import com.prudhvir3ddy.trendinggithubrepos.network.ApiService
 import com.prudhvir3ddy.trendinggithubrepos.ui.MainRepo
 import com.prudhvir3ddy.trendinggithubrepos.ui.MainViewModel
@@ -35,6 +38,16 @@ val networkModule = module {
   single {
     provideMoshiConverterFactory()
   }
+}
+
+val databaseModule = module {
+  single {
+    provideTrendingRepoDao(get())
+  }
+}
+
+private fun provideTrendingRepoDao(context: Context): RepoDao {
+  return TrendingRepoDatabase.getInstance(context).repoDao()
 }
 
 private fun provideApiService(retrofit: Retrofit): ApiService {
