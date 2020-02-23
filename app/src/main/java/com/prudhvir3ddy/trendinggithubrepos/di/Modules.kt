@@ -1,12 +1,12 @@
 package com.prudhvir3ddy.trendinggithubrepos.di
 
 import android.content.Context
+import androidx.room.Room
 import androidx.work.Constraints
 import androidx.work.NetworkType.CONNECTED
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.prudhvir3ddy.trendinggithubrepos.FetchDataWorker
-import com.prudhvir3ddy.trendinggithubrepos.database.RepoDao
 import com.prudhvir3ddy.trendinggithubrepos.database.TrendingRepoDatabase
 import com.prudhvir3ddy.trendinggithubrepos.network.ApiService
 import com.prudhvir3ddy.trendinggithubrepos.ui.MainRepo
@@ -49,7 +49,7 @@ val networkModule = module {
 
 val databaseModule = module {
   single {
-    provideTrendingRepoDao(get())
+    provideRoomDatabase(get())
   }
 }
 
@@ -77,8 +77,13 @@ private fun provideWorkManager(context: Context): WorkManager {
   return WorkManager.getInstance(context)
 }
 
-private fun provideTrendingRepoDao(context: Context): RepoDao {
-  return TrendingRepoDatabase.getInstance(context).repoDao()
+private fun provideRoomDatabase(context: Context): TrendingRepoDatabase {
+  return Room.databaseBuilder(
+    context, TrendingRepoDatabase::class.java,
+    AppConstants.DATABASE_NAME
+  )
+    .fallbackToDestructiveMigration()
+    .build()
 }
 
 private fun provideApiService(retrofit: Retrofit): ApiService {
