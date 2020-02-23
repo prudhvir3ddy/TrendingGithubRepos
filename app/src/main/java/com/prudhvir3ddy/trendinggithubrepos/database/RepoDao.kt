@@ -9,9 +9,11 @@ import androidx.room.Query
 interface RepoDao {
 
   @Insert
-  fun insertRepos(data: List<UIResponse>)
+  suspend fun insertRepos(data: List<UIResponse>)
 
-  @Query("SELECT  * FROM trending_repos")
+  @Query("SELECT * FROM trending_repos")
   fun getAll(): LiveData<List<UIResponse>>
 
+  @Query("DELETE FROM trending_repos")
+  suspend fun deleteAll()
 }

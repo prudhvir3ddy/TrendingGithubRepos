@@ -5,6 +5,7 @@ import com.prudhvir3ddy.trendinggithubrepos.di.databaseModule
 import com.prudhvir3ddy.trendinggithubrepos.di.networkModule
 import com.prudhvir3ddy.trendinggithubrepos.di.repoModule
 import com.prudhvir3ddy.trendinggithubrepos.di.viewModelModule
+import com.prudhvir3ddy.trendinggithubrepos.di.workModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -27,7 +28,8 @@ class MyApplication : Application() {
           networkModule,
           viewModelModule,
           repoModule,
-          databaseModule
+          databaseModule,
+          workModule
         )
       )
     }
