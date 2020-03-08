@@ -1,9 +1,11 @@
 package com.prudhvir3ddy.trendinggithubrepos.database
 
-import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.RawQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 
 @Dao
 interface RepoDao {
@@ -11,8 +13,8 @@ interface RepoDao {
   @Insert
   suspend fun insertRepos(data: List<UIResponse>)
 
-  @Query("SELECT * FROM trending_repos")
-  fun getAll(): LiveData<List<UIResponse>>
+  @RawQuery(observedEntities = [UIResponse::class])
+  fun getAll(query: SupportSQLiteQuery?): DataSource.Factory<Int, UIResponse>
 
   @Query("DELETE FROM trending_repos")
   suspend fun deleteAll()

@@ -4,34 +4,28 @@ import android.app.Application
 import com.prudhvir3ddy.trendinggithubrepos.di.databaseModule
 import com.prudhvir3ddy.trendinggithubrepos.di.networkModule
 import com.prudhvir3ddy.trendinggithubrepos.di.repoModule
-import com.prudhvir3ddy.trendinggithubrepos.di.sharedPrefsModule
 import com.prudhvir3ddy.trendinggithubrepos.di.viewModelModule
+import org.junit.Test
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import org.koin.dsl.koinApplication
+import org.koin.test.KoinTest
+import org.koin.test.check.checkModules
+import org.mockito.Mockito.mock
 
-class MyApplication : Application() {
+class DependencyTest : KoinTest {
 
-  override fun onCreate() {
-    super.onCreate()
-
-    koinInit()
-
-  }
-
-  private fun koinInit() {
-    startKoin {
-      // declare used Android context
-      androidContext(this@MyApplication)
-      // declare modules
+  @Test
+  fun testDependencies() {
+    koinApplication {
+      androidContext(mock(Application::class.java))
       modules(
         listOf(
           networkModule,
           viewModelModule,
           repoModule,
-          databaseModule,
-          sharedPrefsModule
+          databaseModule
         )
       )
-    }
+    }.checkModules()
   }
 }

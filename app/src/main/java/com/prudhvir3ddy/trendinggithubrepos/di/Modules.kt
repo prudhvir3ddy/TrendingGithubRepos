@@ -1,12 +1,9 @@
 package com.prudhvir3ddy.trendinggithubrepos.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
-import androidx.work.Constraints
-import androidx.work.NetworkType.CONNECTED
-import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkManager
-import com.prudhvir3ddy.trendinggithubrepos.FetchDataWorker
+import com.prudhvir3ddy.trendinggithubrepos.SharedPrefs
 import com.prudhvir3ddy.trendinggithubrepos.database.TrendingRepoDatabase
 import com.prudhvir3ddy.trendinggithubrepos.network.ApiService
 import com.prudhvir3ddy.trendinggithubrepos.ui.MainRepo
@@ -17,66 +14,39 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit.HOURS
 
 val viewModelModule = module {
-
-  viewModel {
-    MainViewModel(get(), get(), get())
-  }
-
+  viewModel { MainViewModel(get(), get()) }
 }
 
 val repoModule = module {
-  single {
-    MainRepo(get(), get())
-  }
+  single { MainRepo(get(), get(), get()) }
 }
 
 val networkModule = module {
-  single {
-    provideRetrofit(get())
-  }
+  single { provideRetrofit(get()) }
 
-  single {
-    provideApiService(get())
-  }
+  single { provideApiService(get()) }
 
-  single {
-    provideMoshiConverterFactory()
-  }
+  single { provideMoshiConverterFactory() }
 }
 
 val databaseModule = module {
-  single {
-    provideRoomDatabase(get())
-  }
+  single { provideRoomDatabase(get()) }
 }
 
-val workModule = module {
-  single {
-    provideWorkManager(get())
-  }
-
-  single {
-    providePeriodicWorkRequest()
-  }
+val sharedPrefsModule = module {
+  single { provideSharedPreferences(get()) }
+  single { provideSharedPrefs(get()) }
 }
 
-private fun providePeriodicWorkRequest(): PeriodicWorkRequest {
-  return PeriodicWorkRequest.Builder(FetchDataWorker::class.java, 2, HOURS)
-    .setConstraints(
-      Constraints.Builder()
-        .setRequiredNetworkType(CONNECTED)
-        .build()
-    ).addTag(AppConstants.WORKER_TAG)
-    .build()
+private fun provideSharedPrefs(sharedPreferences: SharedPreferences): SharedPrefs {
+  return SharedPrefs(sharedPreferences)
 }
 
-private fun provideWorkManager(context: Context): WorkManager {
-  return WorkManager.getInstance(context)
+private fun provideSharedPreferences(context: Context): SharedPreferences {
+  return context.getSharedPreferences(AppConstants.MYPREFS, Context.MODE_PRIVATE)
 }
-
 private fun provideRoomDatabase(context: Context): TrendingRepoDatabase {
   return Room.databaseBuilder(
     context, TrendingRepoDatabase::class.java,

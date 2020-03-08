@@ -2,8 +2,9 @@ package com.prudhvir3ddy.trendinggithubrepos.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.prudhvir3ddy.trendinggithubrepos.utils.AppConstants
 
-@Entity(tableName = "trending_repos")
+@Entity(tableName = AppConstants.TABLE_NAME)
 data class UIResponse(
   val author: String,
   val name: String,
