@@ -3,4 +3,7 @@
   <string name="avatar">avatar</string>
   <string name="sort_by_stars">sort by stars</string>
   <string name="sort_by_name">sort by name</string>
+  <string name="fork_logo">Fork Logo</string>
+  <string name="star_logo">star logo</string>
+  <string name="language_color_circle">language color circle</string>
 </resources>

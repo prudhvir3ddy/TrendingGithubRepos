@@ -27,6 +27,7 @@ android {
   kotlinOptions {
     jvmTarget = JavaVersion.VERSION_1_8.toString()
   }
+  dataBinding { enabled = true }
 }
 
 dependencies {
@@ -77,7 +78,7 @@ dependencies {
   implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
   /** paging **/
-  implementation "androidx.paging:paging-runtime:2.1.1"
+  implementation "androidx.paging:paging-runtime-ktx:2.1.1"
 
   /** shimmer layout **/
   implementation 'com.facebook.shimmer:shimmer:0.5.0'
