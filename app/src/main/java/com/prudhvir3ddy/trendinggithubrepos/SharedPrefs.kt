@@ -15,8 +15,8 @@ class SharedPrefs(
     editor.commit()
   }
 
-  fun getSort(): String {
-    return sharedPreferences.getString(AppConstants.SORT_PREF, null) ?: "None"
+  fun getSort(): String? {
+    return sharedPreferences.getString(AppConstants.SORT_PREF, null)
   }
 }
 

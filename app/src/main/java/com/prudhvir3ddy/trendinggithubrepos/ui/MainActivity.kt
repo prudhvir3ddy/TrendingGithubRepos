@@ -3,6 +3,7 @@ package com.prudhvir3ddy.trendinggithubrepos.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
@@ -11,7 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.prudhvir3ddy.trendinggithubrepos.R
 import com.prudhvir3ddy.trendinggithubrepos.R.layout
 import com.prudhvir3ddy.trendinggithubrepos.database.UIResponse
+import com.prudhvir3ddy.trendinggithubrepos.utils.NetworkChecker
+import kotlinx.android.synthetic.main.activity_main.error_layout
 import kotlinx.android.synthetic.main.activity_main.recyclerview
+import kotlinx.android.synthetic.main.activity_main.shimmer
 import kotlinx.android.synthetic.main.activity_main.swipe_refresh
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,9 +34,31 @@ class MainActivity : AppCompatActivity() {
     supportActionBar?.setDisplayShowTitleEnabled(false)
 
     swipe_refresh.setOnRefreshListener {
+      shimmer.startShimmer()
+      shimmer.visibility = View.VISIBLE
+      swipe_refresh.visibility = View.GONE
       mainViewModel.cancelWorkManagerAndStart()
     }
 
+    setupRecyclerView()
+
+    mainViewModel.startWorkManager()
+
+    mObserver = Observer {
+      stopRefresh()
+      if (it.snapshot().isEmpty()) {
+        error_layout.visibility = View.VISIBLE
+        swipe_refresh.visibility = View.GONE
+      } else {
+        error_layout.visibility = View.GONE
+        swipe_refresh.visibility = View.VISIBLE
+        mainRecyclerViewAdapter.submitList(it)
+      }
+    }
+    addObserver()
+  }
+
+  private fun setupRecyclerView() {
     mainRecyclerViewAdapter = MainRecyclerViewAdapter()
     recyclerview.adapter = mainRecyclerViewAdapter
 
@@ -42,16 +68,11 @@ class MainActivity : AppCompatActivity() {
         LinearLayoutManager.VERTICAL
       )
     )
-    mainViewModel.startWorkManager()
-
-    mObserver = Observer {
-      stopRefresh()
-      mainRecyclerViewAdapter.submitList(it)
-    }
-    mainViewModel.data.observe(this, mObserver)
   }
 
   private fun stopRefresh() {
+    shimmer.stopShimmer()
+    shimmer.visibility = View.GONE
     swipe_refresh.isRefreshing = false
   }
 
@@ -82,5 +103,8 @@ class MainActivity : AppCompatActivity() {
 
   private fun removeObserver() = mainViewModel.data.removeObserver(mObserver)
 
-
+  override fun onDestroy() {
+    super.onDestroy()
+    NetworkChecker.unregisterCallback()
+  }
 }

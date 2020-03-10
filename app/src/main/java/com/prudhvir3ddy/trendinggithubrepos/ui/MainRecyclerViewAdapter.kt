@@ -47,17 +47,7 @@ class MainRecyclerViewAdapter : ListAdapter<UIResponse, MainRecyclerViewHolder>(
   }
 
   override fun onBindViewHolder(holder: MainRecyclerViewHolder, position: Int) {
-    val isExpanded = position == mExpandedPosition
-    holder.binding.expandedItemContent.visibility = if (isExpanded) View.VISIBLE else View.GONE
-    holder.itemView.isActivated = isExpanded
-    if (isExpanded) {
-      mPreviousExpandedPosition = position
-    }
-    holder.binding.root.setOnClickListener {
-      mExpandedPosition = if (isExpanded) -1 else position
-      notifyItemChanged(mExpandedPosition)
-      notifyItemChanged(mPreviousExpandedPosition)
-    }
+    handleExpandedViews(position, holder)
     val item = getItem(position)
     val drawable: GradientDrawable =
       holder.binding.languageIv.background.mutate() as GradientDrawable
@@ -76,6 +66,23 @@ class MainRecyclerViewAdapter : ListAdapter<UIResponse, MainRecyclerViewHolder>(
       languageTv.text = item.language
       starCountTv.text = item.stars.toString()
       forkTv.text = item.forks.toString()
+    }
+  }
+
+  private fun handleExpandedViews(
+    position: Int,
+    holder: MainRecyclerViewHolder
+  ) {
+    val isExpanded = position == mExpandedPosition
+    holder.binding.expandedItemContent.visibility = if (isExpanded) View.VISIBLE else View.GONE
+    holder.itemView.isActivated = isExpanded
+    if (isExpanded) {
+      mPreviousExpandedPosition = position
+    }
+    holder.binding.root.setOnClickListener {
+      mExpandedPosition = if (isExpanded) -1 else position
+      notifyItemChanged(mExpandedPosition)
+      notifyItemChanged(mPreviousExpandedPosition)
     }
   }
 
